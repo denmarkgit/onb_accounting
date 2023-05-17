@@ -1,0 +1,25 @@
+---
+- name: Create mapped drive with credentials and save the username and password
+  block:
+  - name: Save the network credentials required for the mapped drive
+    community.windows.win_credential:
+      name: "{{ nas_ip }}"
+      type: domain_password
+      username: "{{ win_user_name }}"
+      secret: "{{ win_password }}"
+      state: present
+
+  - name: Create a mapped drive that requires authentication
+    community.windows.win_mapped_drive:
+      letter: Z
+      path: \\192.168.1.10\It
+      state: present
+
+  vars:
+    # become is required to save and retrieve the credentials in the tasks
+    # ansible_user: "{{ win_user_name }}"
+    # ansible_password: "{{ win_password }}"
+    ansible_become: yes
+    ansible_become_method: runas
+    ansible_become_user: "{{ ansible_user }}"
+    ansible_runas_password: "{{ ansible_password }}"

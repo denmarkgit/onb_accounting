@@ -1,0 +1,11 @@
+---
+- name: adding user
+  ansible.builtin.shell: >
+    cat /etc/passwd | grep -qw {{ win_user_name }} && echo -n HOLDED ||  sudo /usr/local/bin/useradd {{ win_user_name }} -p {{ win_password }} -g It -d /share/home/{{ win_user_name }} -s /bin/sh
+  register: user_hold
+  changed_when: user_hold.stdout != 'HOLDED'
+  notify: add user to samba
+
+        #  handlers:
+        #    - name: add user to samba
+        #      ansible.builtin.shell: (echo {{ win_password }}; echo {{ win_password }}) | sudo /usr/local/samba/bin/smbpasswd -s -a {{ win_user_name }}

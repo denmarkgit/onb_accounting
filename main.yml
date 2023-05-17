@@ -1,0 +1,246 @@
+---
+- name: Bootsrapping new hosts
+  hosts: win
+  tags: ["bootstrap_play"]
+
+  vars_files:
+    - default.config.yml
+
+  pre_tasks:
+    - name: Include playbook user configuration.
+      ansible.builtin.include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: ["always"]
+
+  handlers:
+    - name: Configure Firewall rules (RDS).
+      ansible.windows.win_shell: >
+        "{{ 'Enable-NetFirewallRule' if remote_desktop_enabled else 'Disable-NetFirewallRule' }}
+        -DisplayGroup 'Remotedesktop'"
+
+
+  tasks:
+
+    - name: Include windows updates configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/updates.yml
+      when: install_windows_updates
+      tags: ["updates"]
+
+    - name: Include debloat configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/debloat.yml
+      when: remove_bloatware
+      tags: ["debloat"]
+
+    - name: Include chocolatey configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/chocolatey.yml
+      when: install_chocolatey_packages
+      tags: ["choco"]
+
+    - name: Include winget configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/winget.yml
+      when: install_winget_packages
+      tags: ["winget"]
+
+    - name: Include windows features configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/windows_features.yml
+      when: install_windows_features
+      tags: ["windows_features"]
+
+    - name: Include wsl2 configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/wsl2.yml
+      when: install_wsl2
+      tags: ["wsl"]
+
+    - name: Include fonts configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/fonts.yml
+      when: install_fonts
+      tags: ["fonts"]
+
+    - name: Include ohmyposh configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/ohmyposh.yml
+      when: install_ohmyposh
+      tags: ["ohmyposh"]
+
+    - name: Include explorer configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/explorer.yml
+      when: configure_explorer
+      tags: ["explorer"]
+
+    - name: Include taskbar configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/taskbar.yml
+      when: configure_taskbar
+      tags: ["taskbar"]
+
+    - name: Include start menu configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/start_menu.yml
+      when: configure_start_menu
+      tags: ["start_menu"]
+
+    - name: Include mouse configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/mouse.yml
+      when: disable_mouse_acceleration
+      tags: ["mouse"]
+
+    - name: Include power plan configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/power_plan.yml
+      when: change_power_plan
+      tags: ["power"]
+
+    - name: Include remote desktop configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/remote_desktop.yml
+      when: remote_desktop_enabled
+      tags: ["remote_desktop"]
+
+    - name: Include desktop configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/desktop.yml
+      when: remove_desktop_icons
+      tags: ["desktop"]
+
+    - name: Include storage sense configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/storage.yml
+      when: configure_storage_sense
+      tags: ["storage_sense"]
+
+    - name: Install gdc-kyocera-printer
+      ansible.builtin.import_tasks:
+        file: tasks/gdc_kyocera.yml
+      when: install_kyocera
+      tags: ["gdc_kyocera"]
+
+    - name: Install prt-gdc-imagerunner01-purchasing-11x7
+      ansible.builtin.import_tasks:
+        file: tasks/prt_imagerunner.yml
+      when: install_kyocera
+      tags: ["prt_imagerunner"]
+
+
+    - name: Add new account
+      ansible.builtin.import_tasks:
+        file: tasks/new_account.yml
+      when: add_new_account
+      tags: ["new_account"]
+
+    - name: Include hostname configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/hostname.yml
+      when: configure_hostname
+      tags: ["hostname"]
+
+
+- name: Nas playbook
+  hosts: nas
+  gather_facts: no
+  tags: ["nas_play"]
+
+  vars_files:
+    - default.config.yml
+
+  pre_tasks:
+    - name: Include playbook user configuration.
+      ansible.builtin.include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: ["always"]
+
+  handlers:
+   - name: add user to samba
+     ansible.builtin.shell: (echo {{ win_password }}; echo {{ win_password }}) | sudo /usr/local/samba/bin/smbpasswd -s -a {{ win_user_name }}
+
+  roles:
+    - nas
+
+  tasks:
+   - name: Adding nas account
+     ansible.builtin.import_tasks:
+       file: tasks/nas.yml
+     when: add_nas_account
+     tags: ["nas"]
+
+
+
+- name: Provisioning new host
+  hosts: win
+  tags: ["new_host_play"]
+
+  vars:
+    ansible_user: "{{ win_user_name }}"
+    ansible_password: "{{ win_password }}"
+
+  vars_files:
+    - default.config.yml
+
+  pre_tasks:
+    - name: Include playbook user configuration.
+      ansible.builtin.include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: ["always"]
+
+  tasks:
+
+    - name: Copy Installers
+      ansible.builtin.import_tasks:
+        file: tasks/copy_installers.yml
+      when: copy_installers
+      tags: ["installers"]
+
+    - name: Install rms
+      ansible.builtin.import_tasks:
+        file: tasks/rms.yml
+      when: install_rms
+      tags: ["rms"]
+
+    - name: Map network drive
+      ansible.builtin.import_tasks:
+        file: tasks/map_drive.yml
+      when: map_drive
+      tags: ["map_drive"]
+
+    - name: Include debloat configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/debloat.yml
+      when: remove_bloatware
+      tags: ["debloat2"]
+
+    - name: Include explorer configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/explorer.yml
+      when: configure_explorer
+      tags: ["explorer2"]
+
+    - name: Include taskbar configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/taskbar.yml
+      when: configure_taskbar
+      tags: ["taskbar2"]
+
+    - name: Include start menu configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/start_menu.yml
+      when: configure_start_menu
+      tags: ["start_menu"]
+
+    - name: Include desktop configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/desktop.yml
+      when: remove_desktop_icons
+      tags: ["desktop"]
+
+

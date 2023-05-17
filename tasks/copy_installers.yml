@@ -1,0 +1,10 @@
+---
+- name: create installation folder
+  ansible.windows.win_file:
+    path: C:\Installers
+    state: directory
+
+- name: copy rms installer files
+  ansible.windows.win_copy:
+    src: "files/{{ company }}.exe"
+    dest: C:\Installers
