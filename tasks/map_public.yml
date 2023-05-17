@@ -1,0 +1,5 @@
+---
+- name: Map public drive
+  community.windows.win_mapped_drive:
+    letter: P
+    path: \\192.168.1.10\Public

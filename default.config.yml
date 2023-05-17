@@ -1,77 +1,74 @@
 ---
-configure_explorer: true
-configure_hostname: true
-configure_start_menu: true
-configure_taskbar: true
-disable_mouse_acceleration: true
-remote_desktop_enabled: true
-remove_desktop_icons: true
-set_sound_scheme: true
 
-install_windows_updates: false
-windows_updates_reboot: false
+### Computer Config ###
+
+# enable administrator
+administrator: true
+
+# updates
+install_windows_updates: true
+windows_updates_reboot: true
 update_categories:
-  # You can install only specific updates by uncommenting it
-  # * - installs all updates
-  # - "*"
-  #- Critical Updates
-  # - Definition Updates
-  # - Developer Kits
-  # - Feature Packs
-  #- Security Updates
-  # - Service Packs
-  # - Tools
-  #- Update Rollups
-  # - Updates
-  # - Upgrades
+  - "*"
+
+# timezone
+set_timezone: true
+
+# installed apps via chocolatey
+install_chocolatey_packages: true
+choco_installed_packages:
+  # installs 2019.2.2.20191 version of the adobe reader
+  - name: adobereader
+    version: "2022.002.20191"
+  - name: googlechrome
+    state: latest
+  - name: 7zip
+    state: latest
+  - name: netextender
+    state: latest
+
+# explorer
+configure_explorer: true
+
+# taskbar
+configure_taskbar: true
+
+# start menu
+configure_start_menu: true
+
+# mouse acceleration
+disable_mouse_acceleration: true
+
+# map public drive
+map_public: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+configure_hostname: true
+
+
 
 change_power_plan: false
 # high_performance
 # balanced
 # power_saver
 power_plan: "high_performance"
-
-install_chocolatey_packages: true
-choco_installed_packages:
-  # installs 2019.2.2.20191 version of the adobe reader
-  - name: adobereader
-    version: "2022.002.20191"
-  # installs latest version of the Firefox while ignoring the package checksum
-  - name: Firefox
-    state: latest
-    choco_args: --ignorechecksum
-  - name: googlechrome
-    state: latest
-    choco_args: --ignorechecksum
-
-  - name: 7zip
-    state: latest
-    choco_args: --ignorechecksum
-  #
-  # installs awscli, but won't update it
-  #- awscli
-  #- Firefox
-  #- git
-  #- golang
-  #- jre8
-  #- kubernetes-cli
-  #- microsoft-windows-terminal
-  #- peazip
-  #- powertoys
-  #- python3
-  #- sharex
-  #- telegram
-  #- terraform
-  #- vlc
-  #- vscode
-  #- zoom
-
-install_winget_packages: false
-winget_packages:
-  # - name: "Auto Dark Mode"
-  #   source: winget
-  - name: WinDynamicDesktop
-    source: winget
 
 install_fonts: false
 installed_nerdfonts:
@@ -142,15 +139,6 @@ bloatware:
   - TikTok
   - ESPN
 
-configure_storage_sense: false
-storage_sense:
-  enabled: true
-  run_frequency: 1
-  delete_unused_files: true
-  delete_recycle_bin_files: true
-  recycle_bin_age: 14
-  delete_downloads_files: true
-  downloads_age: 14
 
 defrag_volumes: no
 include_volumes: false
