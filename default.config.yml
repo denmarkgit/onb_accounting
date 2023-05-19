@@ -1,18 +1,18 @@
 ---
 
-### Computer Config ###
+### Computer Configuration ###
 
 # enable administrator
 administrator: true
+
+# timezone
+set_timezone: true
 
 # updates
 install_windows_updates: true
 windows_updates_reboot: true
 update_categories:
   - "*"
-
-# timezone
-set_timezone: true
 
 # installed apps via chocolatey
 install_chocolatey_packages: true
@@ -42,10 +42,21 @@ disable_mouse_acceleration: true
 # map public drive
 map_public: true
 
+# prt-gdc-kyocera01
+install_kyocera: true
 
+PrinterName: "prt-gdc-kyocera01-accounting-Letter Legal"
+PrinterPortName: "Kyocera01"
+PrinterIP: "192.168.1.200"
+PrintDriverName: "Kyocera ECOSYS M3645idn KX"
 
+# Install prt-gdc-imagerunner01
+prt_imagerunner: true
 
-
+IRPrinterName: "prt-gdc-imagerunner01-purchasing-11x7"
+IRPrinterPortName: "imagerunner01"
+IRPrinterIP: "192.168.1.115"
+IRPrintDriverName: "Canon Generic Plus PCL6 V272"
 
 
 
@@ -188,13 +199,7 @@ nas_ip: 192.168.1.10
 install_rms: true
 
 
-##### Install gdc-kyocera printer #####
-install_kyocera: true
 
-PrinterName: "prt-gdc-kyocera01-accounting-Letter Legal"
-PrinterPortName: "KyoceraM3645idn"
-PrinterIP: "192.168.1.200"
-PrintDriverName: "Kyocera ECOSYS M3645idn KX"
 
 ##### Install Install prt-gdc-imagerunner01-purchasing-11x7  #####
 prt_imagerunner: true

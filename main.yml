@@ -32,17 +32,17 @@
       when: install_windows_updates
       tags: ["administrator"]
 
-    - name: Include windows updates configuration.
-      ansible.builtin.import_tasks:
-        file: tasks/updates.yml
-      when: install_windows_updates
-      tags: ["updates"]
-
     - name: Set timezone 
       ansible.builtin.import_tasks:
         file: tasks/timezone.yml
       when: set_timezone
       tags: ["timezone"]
+
+    - name: Include windows updates configuration.
+      ansible.builtin.import_tasks:
+        file: tasks/updates.yml
+      when: install_windows_updates
+      tags: ["updates"]
 
     - name: Include chocolatey configuration.
       ansible.builtin.import_tasks:
@@ -82,15 +82,15 @@
 
     - name: Install prt-gdc-kyocera01
       ansible.builtin.import_tasks:
-        file: tasks/gdc_kyocera.yml
+        file: tasks/prt_kyocera01.yml
       when: install_kyocera
-      tags: ["gdc_kyocera"]
+      tags: ["prt_kyocera01"]
 
     - name: Install prt-gdc-imagerunner01
       ansible.builtin.import_tasks:
-        file: tasks/prt_imagerunner.yml
+        file: tasks/prt_imagerunner01.yml
       when: install_kyocera
-      tags: ["prt_imagerunner"]
+      tags: ["prt_imagerunner01"]
 
     - name: Add new account
       ansible.builtin.import_tasks:
@@ -103,36 +103,6 @@
         file: tasks/hostname.yml
       when: configure_hostname
       tags: ["hostname"]
-
-
-- name: Nas playbook
-  hosts: nas
-  gather_facts: no
-  tags: ["nas_play"]
-
-  vars_files:
-    - default.config.yml
-
-  pre_tasks:
-    - name: Include playbook user configuration.
-      ansible.builtin.include_vars: "{{ item }}"
-      with_fileglob:
-        - "{{ playbook_dir }}/config.yml"
-      tags: ["always"]
-
-  handlers:
-   - name: add user to samba
-     ansible.builtin.shell: (echo {{ win_password }}; echo {{ win_password }}) | sudo /usr/local/samba/bin/smbpasswd -s -a {{ win_user_name }}
-
-  roles:
-    - nas
-
-  tasks:
-   - name: Adding nas account
-     ansible.builtin.import_tasks:
-       file: tasks/nas.yml
-     when: add_nas_account
-     tags: ["nas"]
 
 
 
@@ -196,7 +166,7 @@
       ansible.builtin.import_tasks:
         file: tasks/start_menu.yml
       when: configure_start_menu
-      tags: ["start_menu"]
+      tags: ["start_menu1"]
 
     - name: Include desktop configuration.
       ansible.builtin.import_tasks:
@@ -211,3 +181,32 @@
     #   tags: ["power"]
 
 
+
+# - name: Nas playbook
+# #   hosts: nas
+# #   gather_facts: no
+# #   tags: ["nas_play"]
+
+# #   vars_files:
+# #     - default.config.yml
+
+# #   pre_tasks:
+# #     - name: Include playbook user configuration.
+# #       ansible.builtin.include_vars: "{{ item }}"
+# #       with_fileglob:
+# #         - "{{ playbook_dir }}/config.yml"
+# #       tags: ["always"]
+
+# #   handlers:
+# #    - name: add user to samba
+# #      ansible.builtin.shell: (echo {{ win_password }}; echo {{ win_password }}) | sudo /usr/local/samba/bin/smbpasswd -s -a {{ win_user_name }}
+
+# #   roles:
+# #     - nas
+
+# #   tasks:
+# #    - name: Adding nas account
+# #      ansible.builtin.import_tasks:
+# #        file: tasks/nas.yml
+# #      when: add_nas_account
+# #      tags: ["nas"]
