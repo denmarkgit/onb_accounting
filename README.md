@@ -69,6 +69,7 @@ This playbook installs and configures most of the software I use on my Windows 1
 
 Copy and paste the code below into your PowerShell terminal to get your Windows machine ready to work with Ansible.
 
+WinRm
 ```powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $url = "https://raw.githubusercontent.com/AlexNabokikh/windows-playbook/master/setup.ps1"
