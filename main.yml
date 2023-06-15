@@ -179,7 +179,3 @@
         file: tasks/sage_rdp.yml
       when: sage_rdp
       tags: ["sage_rdp"]
-
-
-
-
