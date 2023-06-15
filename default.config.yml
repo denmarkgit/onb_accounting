@@ -1,7 +1,7 @@
 ---
-
+##############################
 ### Computer Configuration ###
-
+##############################
 # enable administrator
 administrator: true
 
@@ -58,57 +58,55 @@ IRPrinterPortName: "imagerunner01"
 IRPrinterIP: "192.168.1.115"
 IRPrintDriverName: "Canon Generic Plus PCL6 V272"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 configure_hostname: true
 
+##########################
+### User Configuration ###
+##########################
 
+add_new_account: true
 
-change_power_plan: false
+#List of all companies
+# mall
+# gbr
+# pal
+# gdc
+# ambak
+company: gdc
+
+# List of type of device
+# DT
+# LT
+# SV
+# POS
+# MAC
+device_type: LT
+
+# Input new account info here
+first_name: User01
+last_name:  GDC
+win_password: "P@ssw0rd01"
+
+# Do not edit this part
+win_full_name: "{{ first_name }} {{ last_name }}"
+  #grab_first_letter: "{{ last_name | regex_search('^[a-zA-Z]')}}"
+win_user_name: "{{ first_name | lower }}.{{ last_name | lower }}"
+custom_hostname: "{{ device_type }}-{{ first_name }}{{ last_name }}"
+
+# install mesh central
+install_rms: true
+rms_path: '\\192.168.1.10\Public\Software\rms\'
+
+change_power_plan: true
 # high_performance
 # balanced
 # power_saver
 power_plan: "high_performance"
 
-install_fonts: false
-installed_nerdfonts:
-  - FiraCode
-  - FantasqueSansMono
-
-install_ohmyposh: false
-
-# List of features: "Get-WindowsOptionalFeature -Online"
-install_windows_features: false
-windows_features:
-  Microsoft-Hyper-V: true
-
-# List of valid distributions that can be installed:
-# wsl-alpine
-# wsl-archlinux
-# wsl-debiangnulinux
-# wsl-fedoraremix
-# wsl-kalilinux
-# wsl-opensuse
-# wsl-sles
-# wsl-ubuntu-1604
-# wsl-ubuntu-1804
-# wsl-ubuntu-2004
-install_wsl2: false
-wsl2_distribution: wsl-ubuntu-2004
-
 remove_bloatware: true
 bloatware:
+  - User Manuals
+  -  Lenovo Photo Master
   - Microsoft.BingNews
   - Microsoft.BingWeather
   - Microsoft.GamingApp
@@ -150,88 +148,9 @@ bloatware:
   - TikTok
   - ESPN
 
-
-defrag_volumes: no
-include_volumes: false
-
-
-############################################################# Adding new account #############################################################
-
-add_new_account: true
-
-# List of all companies
-# mall
-# gbr
-# pal
-# gdc
-# ambak
-company: gdc
-
-# List of type of device
-# DT
-# LT
-# SV
-# POS
-# MAC
-device_type: LT
-
-# Input new account info here
-first_name: Susana
-last_name: Ligeralde
-
-# Do not edit this part
-win_full_name: "{{ first_name }} {{ last_name }}"
-grab_first_letter: "{{ last_name | regex_search('^[a-zA-Z]')}}"
-win_user_name: "{{ first_name | lower }}{{ grab_first_letter | lower }}"
-win_password: "P@ssw0rd01"
-custom_hostname: "{{ device_type }}-{{ first_name }}{{ last_name }}"
-
-
-##### Copy installers #####
-copy_installers: true
-
-
-##### Map Network Drive #####
-map_drive: true
+map_accounting_drive: true
 nas_ip: 192.168.1.10
 
-##### Install remote management #####
-install_rms: true
+add_explorer_shortcut: true
 
-
-
-
-##### Install Install prt-gdc-imagerunner01-purchasing-11x7  #####
-prt_imagerunner: true
-
-IRPrinterName: "prt-gdc-imagerunner01-purchasing-11x7"
-IRPrinterPortName: "imagerunner001"
-IRPrinterIP: "192.168.1.115"
-IRPrintDriverName: "Canon Generic Plus PCL6 V272"
-
-
-
-
-
-##### Adding nas account #####
-add_nas_account: false
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+sage_rdp: true

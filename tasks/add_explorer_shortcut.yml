@@ -1,0 +1,6 @@
+---
+- name: Create an application shortcut on the desktop
+  community.windows.win_shortcut:
+    src: C:\Windows\explorer.exe
+    dest: C:\Users\{{ win_user_name }}\Desktop\explorer.lnk
+      #icon: C:\Program Files\Mozilla Firefox\Firefox.exe,0

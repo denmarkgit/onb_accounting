@@ -1,7 +1,7 @@
 ---
 - name: Computer configuration
   hosts: win
-  tags: ["bootstrap_play"]
+  tags: ["computerconfig_play"]
 
   vars_files:
     - default.config.yml
@@ -32,7 +32,7 @@
       when: install_windows_updates
       tags: ["administrator"]
 
-    - name: Set timezone 
+    - name: Set timezone
       ansible.builtin.import_tasks:
         file: tasks/timezone.yml
       when: set_timezone
@@ -106,9 +106,9 @@
 
 
 
-- name: Provisioning new host
+- name: Provisioning new user
   hosts: win
-  tags: ["new_host_play"]
+  tags: ["user_config_play"]
 
   vars:
     ansible_user: "{{ win_user_name }}"
@@ -126,87 +126,60 @@
 
   tasks:
 
-    - name: Copy Installers
-      ansible.builtin.import_tasks:
-        file: tasks/copy_installers.yml
-      when: copy_installers
-      tags: ["installers"]
-
     - name: Install rms
       ansible.builtin.import_tasks:
         file: tasks/rms.yml
       when: install_rms
       tags: ["rms"]
 
-    - name: Map network drive
-      ansible.builtin.import_tasks:
-        file: tasks/map_drive.yml
-      when: map_drive
-      tags: ["map_drive"]
-
     - name: Include debloat configuration.
       ansible.builtin.import_tasks:
         file: tasks/debloat.yml
       when: remove_bloatware
-      tags: ["debloat2"]
+      tags: ["debloat_user"]
 
     - name: Include explorer configuration.
       ansible.builtin.import_tasks:
         file: tasks/explorer.yml
       when: configure_explorer
-      tags: ["explorer2"]
+      tags: ["explorer_user"]
 
     - name: Include taskbar configuration.
       ansible.builtin.import_tasks:
         file: tasks/taskbar.yml
       when: configure_taskbar
-      tags: ["taskbar2"]
+      tags: ["taskbar_user"]
 
     - name: Include start menu configuration.
       ansible.builtin.import_tasks:
         file: tasks/start_menu.yml
       when: configure_start_menu
-      tags: ["start_menu1"]
+      tags: ["start_menu_user"]
 
-    - name: Include desktop configuration.
+    - name: Include power plan configuration.
       ansible.builtin.import_tasks:
-        file: tasks/desktop.yml
-      when: remove_desktop_icons
-      tags: ["desktop"]
+        file: tasks/power_plan.yml
+      when: change_power_plan
+      tags: ["power"]
 
-    # - name: Include power plan configuration.
-    #   ansible.builtin.import_tasks:
-    #     file: tasks/power_plan.yml
-    #   when: change_power_plan
-    #   tags: ["power"]
+    - name: Map network drive
+      ansible.builtin.import_tasks:
+        file: tasks/map_accounting_drive.yml
+      when: map_accounting_drive
+      tags: ["map_accounting_drive"]
+
+    - name: file explorer shortcut to desktop
+      ansible.builtin.import_tasks:
+        file: tasks/add_explorer_shortcut.yml
+      when: add_explorer_shortcut
+      tags: ["add_explorer_shortcut"]
+
+    - name: add sage rdp
+      ansible.builtin.import_tasks:
+        file: tasks/sage_rdp.yml
+      when: sage_rdp
+      tags: ["sage_rdp"]
 
 
 
-# - name: Nas playbook
-# #   hosts: nas
-# #   gather_facts: no
-# #   tags: ["nas_play"]
 
-# #   vars_files:
-# #     - default.config.yml
-
-# #   pre_tasks:
-# #     - name: Include playbook user configuration.
-# #       ansible.builtin.include_vars: "{{ item }}"
-# #       with_fileglob:
-# #         - "{{ playbook_dir }}/config.yml"
-# #       tags: ["always"]
-
-# #   handlers:
-# #    - name: add user to samba
-# #      ansible.builtin.shell: (echo {{ win_password }}; echo {{ win_password }}) | sudo /usr/local/samba/bin/smbpasswd -s -a {{ win_user_name }}
-
-# #   roles:
-# #     - nas
-
-# #   tasks:
-# #    - name: Adding nas account
-# #      ansible.builtin.import_tasks:
-# #        file: tasks/nas.yml
-# #      when: add_nas_account
-# #      tags: ["nas"]
