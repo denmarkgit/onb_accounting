@@ -77,7 +77,7 @@
     - name: Map public drive
       ansible.builtin.import_tasks:
         file: tasks/map_public.yml
-      when: map_drive
+      when: map_public
       tags: ["map_public"]
 
     - name: Install prt-gdc-kyocera01
