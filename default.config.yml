@@ -83,8 +83,8 @@ company: gdc
 device_type: LT
 
 # Input new account info here
-first_name: User01
-last_name:  GDC
+first_name: denmark
+last_name:  test
 win_password: "P@ssw0rd01"
 
 # Do not edit this part
