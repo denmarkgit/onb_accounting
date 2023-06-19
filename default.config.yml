@@ -19,7 +19,7 @@ install_chocolatey_packages: true
 choco_installed_packages:
   # installs 2019.2.2.20191 version of the adobe reader
   - name: adobereader
-    version: "2022.002.20191"
+    version: "2022.2.20191"
   - name: googlechrome
     state: latest
   - name: 7zip

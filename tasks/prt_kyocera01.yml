@@ -1,21 +1,28 @@
 ---
 - name: install prt-gdc-kyocera01
   win_shell: pnputil /add-driver "\\192.168.1.10\Public\Software\KX_Universal_Printer_Driver\Kx83_UPD_8.3.0815_RC5_en\64bit\OEMSETUP.INF" /install
+  ignore_errors: true
 
 - name: add printer port
   win_shell: Add-PrinterPort -Name "{{ PrinterPortName }}" -PrinterHostAddress "{{ PrinterIP }}"
+  ignore_errors: true
 
 - name: add printer driver
   win_shell: Add-PrinterDriver -Name "{{ PrintDriverName  }}" # if this string is not known, grab from .inf file
+  ignore_errors: true
 
 - name: add printer
   win_shell: Add-Printer -Name "{{ PrinterName }}" -DriverName "{{ PrintDriverName }}" -PortName "{{ PrinterPortName }}"
+  ignore_errors: true
 
 - name: black and white printing
   win_shell: Set-PrintConfiguration -PrinterName "{{ PrinterName }}" -Color 0 # B&W
+  ignore_errors: true
 
 - name: single-sided printing
   win_shell: Set-PrintConfiguration -PrinterName "{{ PrinterName }}" -DuplexingMode 'OneSided'
+  ignore_errors: true
 
 - name: default letter papersize
   win_shell: Set-PrintConfiguration -PrinterName "{{ PrinterName }}" -PaperSize 'Letter'
+  ignore_errors: true
