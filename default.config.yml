@@ -55,7 +55,7 @@ prt_imagerunner: true
 
 IRPrinterName: "prt-gdc-imagerunner01-purchasing-11x7"
 IRPrinterPortName: "imagerunner01"
-IRPrinterIP: "192.168.1.115"
+IRPrinterIP: "192.168.1.160"
 IRPrintDriverName: "Canon Generic Plus PCL6 V272"
 
 configure_hostname: true
