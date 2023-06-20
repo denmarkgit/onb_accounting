@@ -7,25 +7,32 @@
       }
 
 - name: add printer port
-  win_shell: Add-PrinterPort -Name "{{ PrinterPortName }}" -PrinterHostAddress "{{ PrinterIP }}"
-  ignore_errors: true
+  ansible.windows.win_powershell:
+    script: |
+      if (-not(Get-PrinterPort | Select-String "{{ PrinterPortName }}")) {
+        Add-PrinterPort -Name "{{ PrinterPortName }}" -PrinterHostAddress "{{ PrinterIP }}"
+      }
 
 - name: add printer driver
-  win_shell: Add-PrinterDriver -Name "{{ PrintDriverName  }}" # if this string is not known, grab from .inf file
-  ignore_errors: true
+  ansible.windows.win_powershell:
+    script: |
+      if (-not(Get-Printer | Select-String "{{ PrintDriverName }}")) {
+        Add-PrinterDriver -Name "{{ PrintDriverName }}"
+      }
 
 - name: add printer
-  win_shell: Add-Printer -Name "{{ PrinterName }}" -DriverName "{{ PrintDriverName }}" -PortName "{{ PrinterPortName }}"
-  ignore_errors: true
+  ansible.windows.win_powershell:
+    script: |
+      if (-not(Get-Printer | Select-String "{{ PrinterName }}")) {
+        Add-Printer -Name "{{ PrinterName }}" -DriverName "{{ PrintDriverName }}" -PortName "{{ PrinterPortName }}"
+      }
 
 - name: black and white printing
   win_shell: Set-PrintConfiguration -PrinterName "{{ PrinterName }}" -Color 0 # B&W
-  ignore_errors: true
 
 - name: single-sided printing
   win_shell: Set-PrintConfiguration -PrinterName "{{ PrinterName }}" -DuplexingMode 'OneSided'
-  ignore_errors: true
 
 - name: default letter papersize
   win_shell: Set-PrintConfiguration -PrinterName "{{ PrinterName }}" -PaperSize 'Letter'
-  ignore_errors: true
+
